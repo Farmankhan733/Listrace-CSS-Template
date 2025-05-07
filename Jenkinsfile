@@ -12,9 +12,9 @@ pipeline {
             steps {
                 sh '''
                     echo "Deploying static files to /var/lib/jenkins/html/..."
-                    sudo mkdir -p /var/lib/jenkins/html/
-                    sudo rm -rf /var/lib/jenkins/html/*
-                    sudo cp -r * /var/lib/jenkins/html/
+                    mkdir -p /var/lib/jenkins/html/
+                    rm -rf /var/lib/jenkins/html/*
+                    cp -r * /var/lib/jenkins/html/
                 '''
             }
         }
@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Reloading NGINX to apply changes..."
-                    sudo systemctl reload nginx
+                    systemctl reload nginx
                 '''
             }
         }
