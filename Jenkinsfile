@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-     options {
-        disableResume()
-    }
-
      tools {
         nodejs 'nodejs 18'
     }
