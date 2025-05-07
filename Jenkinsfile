@@ -1,8 +1,14 @@
 pipeline {
     agent any
 
+     options {
+        disableResume()
+    }
 
-
+     tools {
+        nodejs 'nodejs 18'
+    }
+    
     environment {
         APP_PORT = 'http://localhost:8081/'
     }
@@ -14,15 +20,32 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                    echo "Installing dependencies..."
+                    npm install || { echo "Install failed"; exit 1; }
+                '''
             }
         }
 
-        stage('Build (if needed)') {
+        stage('Build') {
             steps {
-                sh 'npm run build || echo "No build step defined"'
+                sh '''
+                    echo "Building the project..."
+                    GENERATE_SOURCEMAP=false npm run build || { echo "Build failed"; exit 1; }
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    echo "Deploying to /var/lib/jenkins/..."
+                    sudo mkdir -p /var/lib/jenkins/
+                    sudo rm -rf /var/lib/jenkins/*
+                    sudo cp -r build/* /var/lib/jenkins/
+                '''
             }
         }
 
@@ -36,9 +59,12 @@ pipeline {
             }
         }
 
-        stage('Start App') {
+        stage('Reload NGINX') {
             steps {
-                sh 'systemctl start nginx'
+                sh '''
+                    echo "Reloading NGINX to serve updated React app..."
+                    sudo systemctl reload nginx
+                '''
             }
         }
 
