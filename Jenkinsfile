@@ -8,31 +8,13 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Deploy Static Files') {
             steps {
                 sh '''
-                    echo "Installing dependencies..."
-                    npm install || { echo "Install failed"; exit 1; }
-                '''
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh '''
-                    echo "Building the project..."
-                    GENERATE_SOURCEMAP=false npm run build || { echo "Build failed"; exit 1; }
-                '''
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                sh '''
-                    echo "Deploying to /var/lib/jenkins/deploy/..."
-                    sudo mkdir -p /var/lib/jenkins/deploy/
-                    sudo rm -rf /var/lib/jenkins/deploy/*
-                    sudo cp -r build/* /var/lib/jenkins/deploy/
+                    echo "Deploying static files to /var/lib/jenkins/html/..."
+                    sudo mkdir -p /var/lib/jenkins/html/
+                    sudo rm -rf /var/lib/jenkins/html/*
+                    sudo cp -r * /var/lib/jenkins/html/
                 '''
             }
         }
@@ -40,7 +22,7 @@ pipeline {
         stage('Reload NGINX') {
             steps {
                 sh '''
-                    echo "Reloading NGINX to serve updated React app..."
+                    echo "Reloading NGINX to apply changes..."
                     sudo systemctl reload nginx
                 '''
             }
@@ -52,7 +34,7 @@ pipeline {
             echo 'Deployment failed!'
         }
         success {
-            echo 'App deployed successfully on localhost!'
+            echo 'Static website deployed successfully!'
         }
     }
 }
