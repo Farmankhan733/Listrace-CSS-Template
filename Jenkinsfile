@@ -5,10 +5,6 @@ pipeline {
         nodejs 'nodejs'  // Must match the tool name in Jenkins
     }
 
-    environment {
-        APP_PORT = 'http://localhost:8081/'
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
@@ -57,10 +53,10 @@ pipeline {
 
     post {
         failure {
-            echo '❌ Deployment failed!'
+            echo 'Deployment failed!'
         }
         success {
-            echo '✅ App deployed successfully on localhost!'
+            echo 'App deployed successfully on localhost!'
         }
     }
 }
