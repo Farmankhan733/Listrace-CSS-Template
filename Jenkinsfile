@@ -6,7 +6,7 @@ pipeline {
     }
 
      tools {
-        nodejs 'Nodejs18'
+        nodejs 'nodejs 18'
     }
     
     environment {
@@ -49,16 +49,6 @@ pipeline {
             }
         }
 
-        stage('Stop Previous App') {
-            steps {
-                sh '''
-                    if lsof -i :$http://localhost:8081/; then
-                      fuser -k ${http://localhost:8081/}/tcp || true
-                    fi
-                '''
-            }
-        }
-
         stage('Reload NGINX') {
             steps {
                 sh '''
@@ -67,13 +57,6 @@ pipeline {
                 '''
             }
         }
-
-        stage('Test App Running') {
-            steps {
-                sh 'sleep 5 && curl http://localhost:${http://localhost:8081/} || echo "App may not have started"'
-            }
-        }
-    }
 
     post {
         failure {
