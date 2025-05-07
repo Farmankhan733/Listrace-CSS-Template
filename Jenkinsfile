@@ -1,10 +1,10 @@
 pipeline {
     agent any
 
-     tools {
-        nodejs 'nodejs 18'
+    tools {
+        nodejs 'nodejs18'  // Must match the tool name in Jenkins
     }
-    
+
     environment {
         APP_PORT = 'http://localhost:8081/'
     }
@@ -16,7 +16,7 @@ pipeline {
             }
         }
 
-         stage('Install Dependencies') {
+        stage('Install Dependencies') {
             steps {
                 sh '''
                     echo "Installing dependencies..."
@@ -37,10 +37,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    echo "Deploying to /var/lib/jenkins/..."
-                    sudo mkdir -p /var/lib/jenkins/
-                    sudo rm -rf /var/lib/jenkins/*
-                    sudo cp -r build/* /var/lib/jenkins/
+                    echo "Deploying to /var/lib/jenkins/deploy/..."
+                    sudo mkdir -p /var/lib/jenkins/deploy/
+                    sudo rm -rf /var/lib/jenkins/deploy/*
+                    sudo cp -r build/* /var/lib/jenkins/deploy/
                 '''
             }
         }
@@ -53,14 +53,14 @@ pipeline {
                 '''
             }
         }
+    }
 
     post {
         failure {
-            echo 'Deployment failed!'
+            echo '❌ Deployment failed!'
         }
         success {
-            echo 'App deployed successfully on localhost!'
+            echo '✅ App deployed successfully on localhost!'
         }
     }
-}
 }
