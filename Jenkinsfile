@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'nodejs'  // Must match the tool name in Jenkins
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
