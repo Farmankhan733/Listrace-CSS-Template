@@ -1,10 +1,8 @@
 pipeline {
     agent any
 
-     options {
-        disableResume()
-    }
-    
+
+
     environment {
         APP_PORT = 'http://localhost:8081/'
     }
