@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Reloading NGINX to apply changes..."
-                    systemctl reload nginx
+                    systemctl restart nginx
                 '''
             }
         }
