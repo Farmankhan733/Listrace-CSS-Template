@@ -4,7 +4,7 @@ pipeline {
        options {
         disableResume()
         timestamps()
-    
+    }
 
     stages {
         stage('Clone Repository') {
